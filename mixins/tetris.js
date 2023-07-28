@@ -36,14 +36,14 @@ const tetrominos = {
   ],
 };
 
-const colors = {
-  I: "cyan",
-  O: "yellow",
-  T: "purple",
-  S: "green",
-  Z: "red",
-  J: "blue",
-  L: "orange",
+export const colors = {
+  I: "#3877ff",
+  O: "#ffe138",
+  T: "#ff0d72",
+  S: "#f538ff",
+  Z: "#ff8e0d",
+  J: "#ff8e0d",
+  L: "#0dff72",
 };
 
 export default {
@@ -51,7 +51,23 @@ export default {
     return {
       colors: colors,
       tetrominos: tetrominos,
-      boxSize: 32,
+      boxSize: 40,
+      tetrominosSequance: null,
     };
+  },
+  methods: {
+    createTetrominosSequance() {
+      const tetrominos = ["I", "O", "T", "S", "Z", "J", "L"];
+      let result = [];
+      for (let i = 0; i < 7; i++) {
+        const index = this.generateIndex();
+
+        result.push(tetrominos[index]);
+      }
+      this.tetrominosSequance = result;
+    },
+    generateIndex() {
+      return Math.floor(Math.random() * (7 - 0));
+    },
   },
 };

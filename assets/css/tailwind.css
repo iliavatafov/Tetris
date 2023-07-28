@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Handjet:wght@300;400;500;600;700;800;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +11,6 @@
   }
 
   body {
-    @apply bg-black flex items-center justify-center;
+    @apply bg-[#ffffff] flex items-center justify-center;
   }
 }
