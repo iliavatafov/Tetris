@@ -49,8 +49,8 @@ export const colors = {
 export default {
   data() {
     return {
-      colors: colors,
-      tetrominos: tetrominos,
+      colors,
+      tetrominos,
       boxSize: 40,
       tetrominosSequance: null,
     };

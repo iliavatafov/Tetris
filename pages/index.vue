@@ -1,25 +1,31 @@
 <template>
-  <div class="bg-[#ffffff] flex gap-12 font-cursive">
-    <canvas
-      class="border border-[#00DFA2] border-4"
-      width="400"
-      height="800"
-      id="game"
-    ></canvas>
-    <div>
-      <div class="flex flex-col gap-8">
-        <next-element
-          v-if="nextTetromino"
-          :tetromino="nextTetromino"
-        ></next-element>
-        <ul class="text-black flex flex-col gap-8">
-          <score-board-item title="level" :value="level"></score-board-item>
-          <score-board-item
-            title="lines"
-            :value="clearedLines"
-          ></score-board-item>
-          <score-board-item title="score" :value="score"></score-board-item>
-        </ul>
+  <div>
+    <portal-target name="body-dialog"></portal-target>
+    <game-over
+      v-if="gamaeOver"
+      @playAgain="playAgain"
+      :level="level"
+      :clearedLines="clearedLines"
+      :score="score"
+    ></game-over>
+    <start-game v-if="!isGameStart" @gameStart="startGame"></start-game>
+    <div
+      v-if="isGameStart && !gamaeOver"
+      class="bg-[#ffffff] flex gap-12 font-cursive"
+    >
+      <canvas
+        class="border border-[#00DFA2] border-4"
+        width="400"
+        height="800"
+        id="game"
+      ></canvas>
+      <div>
+        <score-board
+          :level="level"
+          :clearedLines="clearedLines"
+          :score="score"
+          :nextTetromino="nextTetromino"
+        ></score-board>
       </div>
     </div>
   </div>
@@ -27,14 +33,14 @@
 
 <script>
 import tetris from "~/mixins/tetris.js";
-import ScoreBoardItem from "~/components/ScoreBoardItem.vue";
-import NextElement from "~/components/NextElement.vue";
+import ScoreBoard from "~/components/ScoreBoard.vue";
+import StartGame from "~/components/StartGame.vue";
+import GameOver from "~/components/GameOver.vue";
 
 export default {
-  name: "IndexPage",
   components: {
-    ScoreBoardItem,
-    NextElement,
+    ScoreBoard,
+    StartGame,
   },
   mixins: [tetris],
   data() {
@@ -49,35 +55,64 @@ export default {
       level: 1,
       score: 0,
       nextTetromino: null,
+      isGameStart: false,
+      gamaeOver: false,
     };
   },
   created() {
-    const playfield = [];
-    for (let row = -2; row < 20; row++) {
-      playfield[row] = [];
-      for (let col = 0; col < 10; col++) {
-        playfield[row][col] = 0;
-      }
-    }
-    this.playfield = playfield;
-    this.createTetrominosSequance();
-    this.setTetrominoData(this.tetrominosSequance.shift());
-    this.nextTetromino = this.tetrominosSequance[0];
+    this.createPlayfield();
   },
   mounted() {
-    this.animate();
     document.body.addEventListener("keydown", this.moveTetromino);
   },
   beforeDestroy() {
     document.body.removeEventListener("keydown", this.moveTetromino);
   },
   methods: {
+    playAgain() {
+      this.playfield = null;
+      this.tetromino = null;
+      this.count = 0;
+      this.canvas = null;
+      this.context = null;
+      this.fallSpeed = 43;
+      this.clearedLines = 0;
+      this.level = 1;
+      this.score = 0;
+      this.nextTetromino = null;
+      this.gamaeOver = false;
+
+      this.createPlayfield();
+      this.animate();
+    },
+    createPlayfield() {
+      const playfield = [];
+      for (let row = -2; row < 20; row++) {
+        playfield[row] = [];
+        for (let col = 0; col < 10; col++) {
+          playfield[row][col] = 0;
+        }
+      }
+      this.playfield = playfield;
+      this.createTetrominosSequance();
+      this.setTetrominoData(this.tetrominosSequance.shift());
+      this.nextTetromino = this.tetrominosSequance[0];
+    },
+    startGame() {
+      this.isGameStart = true;
+      this.animate();
+    },
     drawPlayfield() {
       if (!this.context || !this.canvas) {
         this.canvas = document.getElementById("game");
+        if (!this.canvas) {
+          return;
+        }
         this.context = this.canvas.getContext("2d");
       }
+
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
       for (let row = 0; row < 20; row++) {
         for (let col = 0; col < 10; col++) {
           if (this.playfield[row][col]) {
@@ -141,6 +176,9 @@ export default {
       for (let row = 0; row < this.tetromino.matrix.length; row++) {
         for (let col = 0; col < this.tetromino.matrix[row].length; col++) {
           if (this.tetromino.matrix[row][col]) {
+            if (this.tetromino.row + row < 0) {
+              this.gamaeOver = true;
+            }
             this.playfield[this.tetromino.row + row][this.tetromino.col + col] =
               this.tetromino.name;
           }
@@ -191,12 +229,14 @@ export default {
           this.score += 800 * this.level;
           break;
       }
-
-      if (this.tetrominosSequance.length === 0) {
+      if (this.tetrominosSequance.length === 1) {
+        this.setTetrominoData(this.tetrominosSequance.shift());
         this.createTetrominosSequance();
+        this.nextTetromino = this.tetrominosSequance[0];
+      } else {
+        this.setTetrominoData(this.tetrominosSequance.shift());
+        this.nextTetromino = this.tetrominosSequance[0];
       }
-      this.setTetrominoData(this.tetrominosSequance.shift());
-      this.nextTetromino = this.tetrominosSequance[0];
     },
     moveTetromino(e) {
       if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
@@ -245,9 +285,21 @@ export default {
             this.addTetrominoToPlayfield();
           }
         }
-        requestAnimationFrame(animationFrame);
+        if (!this.gamaeOver) {
+          requestAnimationFrame(animationFrame);
+        } else {
+          cancelAnimationFrame(animationFrame);
+        }
       };
+
       animationFrame();
+    },
+  },
+  watch: {
+    isGameStart(isStarted) {
+      if (isStarted) {
+        this.animate();
+      }
     },
   },
 };
