@@ -1,6 +1,6 @@
 <template>
-  <li class="text-6xl text-[#489dff] font-bold">
-    {{ title }} <span class="text-[#00DFA2]">{{ value }}</span>
+  <li class="text-5xl text-[#489dff] font-bold">
+    {{ title }} <span class="text-[#a084e8]">{{ value }}</span>
   </li>
 </template>
 

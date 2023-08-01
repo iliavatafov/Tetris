@@ -11,6 +11,6 @@
   }
 
   body {
-    @apply bg-[#ffffff] flex items-center justify-center;
+    @apply bg-[#000] flex items-center justify-center;
   }
 }

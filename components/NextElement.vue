@@ -1,10 +1,5 @@
 <template>
-  <canvas
-    class="border border-[#00DFA2] border-4"
-    width="300"
-    height="160"
-    id="next-element"
-  ></canvas>
+  <canvas width="300" height="160" id="next-element"></canvas>
 </template>
 
 <script>
@@ -68,3 +63,22 @@ export default {
   },
 };
 </script>
+
+<style>
+#next-element {
+  border: 4px solid #8be8e5;
+  animation: shine-border 3s infinite linear;
+}
+
+@keyframes shine-border {
+  0%,
+  100% {
+    border-color: #8be8e5;
+    box-shadow: none;
+  }
+  50% {
+    border-color: #a084e8;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+}
+</style>

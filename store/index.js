@@ -286,7 +286,15 @@ export const actions = {
         });
       });
 
-      dispatch("setTetrominoMatrix", matrix);
+      const isValid = await dispatch("isValidMove", {
+        matrixData: matrix,
+        rowData: state.tetromino.row,
+        colData: state.tetromino.col,
+      });
+
+      if (isValid) {
+        dispatch("setTetrominoMatrix", matrix);
+      }
     }
   },
 

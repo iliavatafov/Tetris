@@ -11,14 +11,9 @@
     <start-game v-if="!isGameStart" @gameStart="startGame"></start-game>
     <div
       v-if="isGameStart && !gameOver"
-      class="bg-[#ffffff] flex gap-12 font-cursive"
+      class="bg-[#000] flex gap-12 font-cursive"
     >
-      <canvas
-        class="border border-[#00DFA2] border-4"
-        width="400"
-        height="800"
-        id="game"
-      ></canvas>
+      <canvas width="400" height="800" id="game"></canvas>
       <div>
         <score-board
           :level="level"
@@ -74,3 +69,22 @@ export default {
   },
 };
 </script>
+
+<style>
+#game {
+  border: 4px solid #8be8e5;
+  animation: shine-border 3s infinite linear;
+}
+
+@keyframes shine-border {
+  0%,
+  100% {
+    border-color: #8be8e5;
+    box-shadow: none;
+  }
+  50% {
+    border-color: #a084e8;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+}
+</style>

@@ -43,5 +43,5 @@ export const colors = {
   S: "#f538ff",
   Z: "#ff8e0d",
   J: "#ff8e0d",
-  L: "#0dff72",
+  L: "#0dc2ff",
 };
