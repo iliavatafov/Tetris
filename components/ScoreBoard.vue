@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-8">
-    <next-element :tetromino="nextTetromino"></next-element>
+    <next-element></next-element>
     <ul class="text-black flex flex-col gap-8">
       <score-board-item title="level" :value="level"></score-board-item>
       <score-board-item title="lines" :value="clearedLines"></score-board-item>
@@ -14,7 +14,7 @@ import ScoreBoardItem from "~/components/ScoreBoardItem.vue";
 import NextElement from "~/components/NextElement.vue";
 
 export default {
-  props: ["level", "clearedLines", "score", "nextTetromino"],
+  props: ["level", "clearedLines", "score"],
   components: {
     ScoreBoardItem,
     NextElement,

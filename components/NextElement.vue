@@ -8,23 +8,22 @@
 </template>
 
 <script>
-import tetris from "~/mixins/tetris.js";
-
+import { mapState, mapActions } from "vuex";
 export default {
-  props: ["tetromino"],
-  mixins: [tetris],
+  computed: mapState([
+    "tetrominos",
+    "nextTetromino",
+    "colors",
+    "boxSize",
+    "tetromino",
+  ]),
   methods: {
-    setTetrominoData(name) {
-      const matrix = JSON.parse(JSON.stringify(this.tetrominos[name]));
-      const col = 8 / 2 - Math.ceil(matrix[0].length / 2);
-      const row = 1;
-      return {
-        name,
-        matrix,
-        col,
-        row,
-      };
-    },
+    ...mapActions([
+      "createPlayfield",
+      "createTetrominosSequance",
+      "shiftTetromino",
+      "setNextTetromino",
+    ]),
     displayNextTetromino(name) {
       const tetrominoData = this.setTetrominoData(name);
 
@@ -47,12 +46,23 @@ export default {
         }
       }
     },
+    setTetrominoData(name) {
+      const matrix = JSON.parse(JSON.stringify(this.tetrominos[name]));
+      const col = 8 / 2 - Math.ceil(matrix[0].length / 2);
+      const row = 1;
+      return {
+        name,
+        matrix,
+        col,
+        row,
+      };
+    },
   },
   mounted() {
-    this.displayNextTetromino(this.tetromino);
+    this.displayNextTetromino(this.nextTetromino);
   },
   watch: {
-    tetromino(value) {
+    nextTetromino(value) {
       this.displayNextTetromino(value);
     },
   },
