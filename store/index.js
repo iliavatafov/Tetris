@@ -54,6 +54,9 @@ export const mutations = {
   increaseLevel(state) {
     state.level++;
   },
+  setFallSpeed(state, payload) {
+    state.fallSpeed = payload;
+  },
   increaseFallSpeed(state, payload) {
     state.fallSpeed += payload;
   },
@@ -122,6 +125,7 @@ export const actions = {
         }
       }
     }
+
     if (state.tetromino) {
       state.context.fillStyle = state.colors[state.tetromino.name];
 
@@ -170,7 +174,7 @@ export const actions = {
     animationFrame();
   },
 
-  addTetrominoToPlayfield({ state, commit, dispatch }) {
+  async addTetrominoToPlayfield({ state, commit, dispatch }) {
     for (let row = 0; row < state.tetromino.matrix.length; row++) {
       for (let col = 0; col < state.tetromino.matrix[row].length; col++) {
         if (state.tetromino.matrix[row][col]) {
@@ -189,17 +193,18 @@ export const actions = {
     for (let row = state.playfield.length - 1; row >= 0; ) {
       if (state.playfield[row].every((box) => !!box)) {
         numberOfClearedLines++;
+
         commit("increaseClearedLines");
         if (state.clearedLines % 10 === 0) {
           commit("increaseLevel");
-          if (this.level < 8) {
+          if (state.level < 8) {
             commit("decreaseFallSpeed", 5);
           } else if (state.level === 9) {
             commit("decreaseFallSpeed", 2);
           } else if (state.level < 28) {
             commit("decreaseFallSpeed", 1);
           } else if (state.level === 29) {
-            commit("increaseFallSpeed", 1);
+            commit("setFallSpeed", 1);
           }
         }
 
@@ -362,6 +367,10 @@ export const actions = {
     commit("resetState", { ...initialState, isGameStart: true });
     dispatch("createPlayfield");
     dispatch("animate");
+  },
+
+  resetState({ commit }) {
+    commit("resetState", { ...initialState, isGameStart: false });
   },
 
   setNextTetromino({ commit }, payload) {

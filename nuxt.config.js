@@ -1,8 +1,6 @@
 export default {
-  // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
-  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "Tetris",
     htmlAttrs: {
@@ -17,24 +15,18 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~/assets/css/tailwind.css"],
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: "~/plugins/portal-plugin.js", mode: "client" }],
-
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
-
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // https://go.nuxtjs.dev/tailwindcss
-    "@nuxtjs/tailwindcss",
+  plugins: [
+    { src: "~/plugins/portal-plugin.js", mode: "client" },
+    { src: "~/plugins/global-components", mode: "client" },
   ],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
+  components: true,
+
+  buildModules: ["@nuxtjs/tailwindcss"],
+
   modules: ["portal-vue/nuxt"],
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 };

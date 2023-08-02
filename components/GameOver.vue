@@ -1,7 +1,7 @@
 <template>
   <portal to="body-dialog">
     <div
-      class="w-screen h-screen bg-black flex items-center justify-center font-cursive"
+      class="w-screen bg-black flex items-center justify-center font-cursive"
     >
       <div
         class="text-8xl tracking-wider font-extrabold text-[#999999] flex flex-col items-center justify-center gap-24"

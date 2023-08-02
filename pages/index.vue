@@ -11,7 +11,7 @@
     <start-game v-if="!isGameStart" @gameStart="startGame"></start-game>
     <div
       v-if="isGameStart && !gameOver"
-      class="bg-[#000] flex gap-12 font-cursive"
+      class="bg-[#000] flex gap-12 font-cursive h-5/6"
     >
       <canvas width="400" height="800" id="game"></canvas>
       <div>
