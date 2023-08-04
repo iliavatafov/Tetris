@@ -15,7 +15,7 @@ export default {
 
 <style>
 #card {
-  border-bottom: 2px solid #8be8e5;
+  border: 2px solid #8be8e5;
   animation: shine-border 3s infinite linear;
 }
 

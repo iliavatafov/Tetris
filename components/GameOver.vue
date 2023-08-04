@@ -1,5 +1,17 @@
 <template>
-  <portal to="body-dialog">
+  <div>
+    <base-dialog :show="isLoading" title="Authenticating..." fixed>
+      <base-spinner></base-spinner>
+    </base-dialog>
+    <base-dialog
+      :show="error.isError"
+      title="An error occured"
+      @close="handleError"
+    >
+      <p>
+        {{ error.msg }}
+      </p>
+    </base-dialog>
     <div
       class="w-screen bg-black flex items-center justify-center font-cursive"
     >
@@ -63,11 +75,12 @@
         </button>
       </div>
     </div>
-  </portal>
+  </div>
 </template>
 
 <script>
 import ScoreBoardItem from "~/components/ScoreBoardItem.vue";
+import { formatCurrentDate } from "~/utils/dateFormatter.js";
 
 export default {
   emits: ["playAgain"],
@@ -75,9 +88,69 @@ export default {
     ScoreBoardItem,
   },
   props: ["level", "clearedLines", "score"],
+  data() {
+    return {
+      isTopPlayer: false,
+      isLoading: false,
+      error: {
+        msg: null,
+        isError: false,
+      },
+    };
+  },
+  async created() {
+    if (this.isAuthenticated) {
+      this.isLoading = true;
+      const currentDate = formatCurrentDate();
+
+      const payloadData = {
+        userId: this.userId,
+        game: {
+          score: this.score,
+          level: this.level,
+          clearedLines: this.clearedLines,
+          date: currentDate,
+        },
+      };
+
+      try {
+        await this.$store.dispatch("statistics/addGameResult", payloadData);
+      } catch (error) {
+        this.error.isError = true;
+        this.error.msg = error.message || "Faild to fetch users!";
+      }
+
+      try {
+        const result = await this.$store.dispatch(
+          "statistics/addTopPlayer",
+          payloadData
+        );
+        this.isTopPlayer = result;
+      } catch (error) {
+        this.error.isError = true;
+        this.error.msg = error.message || "Faild to fetch users!";
+      }
+
+      this.isLoading = false;
+    }
+  },
+  computed: {
+    userId() {
+      return this.$store.getters["auth/userId"];
+    },
+    isAuthenticated() {
+      return this.$store.getters["auth/isAuthenticated"];
+    },
+  },
   methods: {
     play() {
       this.$emit("playAgain");
+    },
+    handleError() {
+      this.error = {
+        msg: null,
+        isError: false,
+      };
     },
   },
 };

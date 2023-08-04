@@ -1,6 +1,5 @@
 <template>
   <div>
-    <portal-target name="body-dialog"></portal-target>
     <game-over
       v-if="gameOver"
       @playAgain="playAgain"
@@ -14,13 +13,14 @@
       class="bg-[#000] flex gap-12 font-cursive h-5/6"
     >
       <canvas width="400" height="800" id="game"></canvas>
-      <div>
+      <div class="flex flex-col gap-12">
         <score-board
           :level="level"
           :clearedLines="clearedLines"
           :score="score"
           :nextTetromino="nextTetromino"
         ></score-board>
+        <game-actions></game-actions>
       </div>
     </div>
   </div>
@@ -32,11 +32,13 @@ import { mapState, mapActions } from "vuex";
 import ScoreBoard from "~/components/ScoreBoard.vue";
 import StartGame from "~/components/StartGame.vue";
 import GameOver from "~/components/GameOver.vue";
+import GameActions from "~/components/GameActions.vue";
 
 export default {
   components: {
     ScoreBoard,
     StartGame,
+    GameActions,
   },
   computed: {
     ...mapState([
@@ -72,7 +74,7 @@ export default {
 
 <style>
 #game {
-  border: 4px solid #8be8e5;
+  border: 2px solid #8be8e5;
   animation: shine-border 3s infinite linear;
 }
 

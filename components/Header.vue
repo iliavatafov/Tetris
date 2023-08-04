@@ -4,12 +4,20 @@
       <ul
         class="flex items-center h-100% justify-end gap-4 text-[#8be8e5] text-xl font-bold tracking-wider"
       >
+        <li class="p-4 text-[#a084e8]">
+          {{ userEmail }}
+        </li>
         <li class="p-4 cursor-pointer hover:text-[#a084e8] hover:underline">
           <nuxt-link to="/">New Game</nuxt-link>
         </li>
-
         <li class="p-4 cursor-pointer hover:text-[#a084e8] hover:underline">
-          RankList
+          <nuxt-link to="/rank-list"> Rank List</nuxt-link>
+        </li>
+        <li
+          v-if="isAuthenticated"
+          class="p-4 cursor-pointer hover:text-[#a084e8] hover:underline"
+        >
+          <nuxt-link to="/my-games">My Stats</nuxt-link>
         </li>
         <li
           v-if="!isAuthenticated"
@@ -17,7 +25,6 @@
         >
           <nuxt-link to="/auth">SignIn</nuxt-link>
         </li>
-
         <li
           v-if="isAuthenticated"
           @click="logout"
@@ -35,6 +42,12 @@ export default {
   computed: {
     isAuthenticated() {
       return this.$store.getters["auth/isAuthenticated"];
+    },
+    userEmail() {
+      return this.$store.getters["auth/getUserEmail"];
+    },
+    userId() {
+      return this.$store.getters["auth/userId"];
     },
   },
   methods: {

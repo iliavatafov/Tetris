@@ -34,12 +34,14 @@ export const actions = {
       mode: "login",
     });
   },
+
   signup(context, payload) {
     return context.dispatch("auth", {
       ...payload,
       mode: "signup",
     });
   },
+
   async auth(context, payload) {
     const mode = payload.mode;
 
@@ -48,6 +50,7 @@ export const actions = {
     if (mode === "signup") {
       url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDHVhzbi-NHN5tC0-59MoYSqMeYWXwC2kc`;
     }
+
     const respone = await fetch(url, {
       method: "POST",
       body: JSON.stringify({
@@ -58,11 +61,31 @@ export const actions = {
     });
 
     const responseData = await respone.json();
+
     if (!respone.ok) {
       const error = new Error(
         responseData.message || "Fail to authenticate, check your login data."
       );
       throw error;
+    }
+
+    if (mode === "signup") {
+      const usersUrl = `https://tetris-e5ce2-default-rtdb.europe-west1.firebasedatabase.app/users/${responseData.localId}.json`;
+
+      const res = await fetch(usersUrl, {
+        method: "PUT",
+        body: JSON.stringify({
+          email: payload.email,
+          name: payload.name,
+        }),
+      });
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        const error = new Error(resData.message || "Somthing went wrong");
+        throw error;
+      }
     }
 
     const expiresIn = responseData.expiresIn * 1000;
@@ -84,12 +107,12 @@ export const actions = {
       email: responseData.email,
     });
   },
+
   tryLogin(context) {
     // Get stored data from localStorage
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const userEmail = localStorage.getItem("userEmail");
-
     const tokenExpiration = localStorage.getItem("tokenExpiration");
 
     // Calculate token expiration time
@@ -97,6 +120,7 @@ export const actions = {
 
     // Return if token is expired
     if (expiresIn < 0) {
+      const token = localStorage.clear();
       return;
     }
 
@@ -106,6 +130,7 @@ export const actions = {
     }, expiresIn);
 
     // If there is token and userId in localStorage set the user data in the Vuex store
+
     if (token && userId) {
       context.commit("setUser", {
         token,
@@ -114,6 +139,7 @@ export const actions = {
       });
     }
   },
+
   logout(context) {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
@@ -128,6 +154,7 @@ export const actions = {
       email: "",
     });
   },
+
   autoLogout(context) {
     context.dispatch("logout");
     context.commit("setAutoLogout");
@@ -141,6 +168,7 @@ export const mutations = {
     state.email = payload.email;
     state.didAutoLogout = false;
   },
+
   setAutoLogout(state) {
     state.didAutoLogout = true;
   },

@@ -72,6 +72,9 @@ export const mutations = {
   setContext(state, payload) {
     state.context = payload;
   },
+  cancelAnimation(state) {
+    state.cancelAnimation = true;
+  },
 };
 
 export const actions = {
@@ -171,7 +174,13 @@ export const actions = {
       }
     };
 
-    animationFrame();
+    if (state.tetromino && !state.cancelAnimation) {
+      animationFrame();
+    }
+  },
+
+  cancelAnimation({ commit }) {
+    commit("cancelAnimation");
   },
 
   async addTetrominoToPlayfield({ state, commit, dispatch }) {
@@ -364,12 +373,11 @@ export const actions = {
   },
 
   playAgain({ commit, dispatch }) {
-    commit("resetState", { ...initialState, isGameStart: true });
+    commit("resetState", initialState);
     dispatch("createPlayfield");
-    dispatch("animate");
   },
 
-  resetState({ commit }) {
+  resetState({ state, commit }) {
     commit("resetState", { ...initialState, isGameStart: false });
   },
 

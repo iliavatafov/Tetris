@@ -66,7 +66,7 @@ export default {
 
 <style>
 #next-element {
-  border: 4px solid #8be8e5;
+  border: 2px solid #8be8e5;
   animation: shine-border 3s infinite linear;
 }
 

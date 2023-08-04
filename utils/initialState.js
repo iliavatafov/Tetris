@@ -19,4 +19,5 @@ export default {
   context: null,
   isGameStart: false,
   boxSize: 40,
+  cancelAnimation: false,
 };

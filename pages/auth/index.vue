@@ -25,6 +25,11 @@
             type="email"
           />
         </div>
+        <div v-if="mode !== 'login'" class="my-2">
+          <label class="base-label" for="name">Name</label>
+          <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+          <input id="name" v-model.trim="name" class="base-input" type="text" />
+        </div>
         <div class="my-2">
           <label class="base-label" for="password">Password</label>
           <!-- eslint-disable-next-line vue/max-attributes-per-line -->
@@ -35,8 +40,18 @@
             type="password"
           />
         </div>
+        <div v-if="mode !== 'login'" class="my-2">
+          <label class="base-label" for="repass">Repear Password</label>
+          <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+          <input
+            id="repass"
+            v-model.trim="repass"
+            class="base-input"
+            type="password"
+          />
+        </div>
         <p class="validation-messaga" v-if="!formIsValid">
-          Please enter valid email and password
+          {{ validationMessage }}
         </p>
         <button class="text-xl base-btn mt-4 hover:animate-pulse font-cursive">
           {{ submitButtonCaption }}
@@ -60,8 +75,11 @@ export default {
   data() {
     return {
       email: "",
+      name: "",
       password: "",
+      repass: "",
       formIsValid: true,
+      validationMessage: "",
       mode: "login",
       isLoading: false,
       error: {
@@ -72,6 +90,8 @@ export default {
   },
   created() {
     this.resetState();
+    this.cancelAnimation();
+    this.createPlayfield();
   },
   computed: {
     submitButtonCaption() {
@@ -90,30 +110,54 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["resetState", "cancelAnimation"]),
+    ...mapActions(["resetState", "createPlayfield", "cancelAnimation"]),
     async submitForm() {
       this.formIsValid = true;
-      if (
-        this.email === "" ||
-        !this.email.includes("@") ||
-        this.password.length < 6
-      ) {
+
+      if (this.mode !== "login") {
+        if (
+          this.email === "" ||
+          this.name === "" ||
+          this.password === "" ||
+          this.repass === ""
+        ) {
+          this.formIsValid = false;
+          this.validationMessage = "All fields are required";
+          return;
+        }
+        if (this.password !== this.repass) {
+          this.formIsValid = false;
+          this.validationMessage = "Password don`t match";
+          return;
+        }
+      }
+
+      if (this.email === "" || this.password.length < 6) {
         this.formIsValid = false;
+        this.validationMessage = "Please enter valid email and password";
+        return;
+      }
+
+      if (!this.email.includes("@")) {
+        this.formIsValid = false;
+        this.validationMessage = "Please enter valid email";
         return;
       }
 
       this.isLoading = true;
 
-      const actionPayload = {
-        email: this.email,
-        password: this.password,
-      };
-
       try {
         if (this.mode === "login") {
-          await this.$store.dispatch("auth/login", actionPayload);
+          await this.$store.dispatch("auth/login", {
+            email: this.email,
+            password: this.password,
+          });
         } else {
-          await this.$store.dispatch("auth/signup", actionPayload);
+          await this.$store.dispatch("auth/signup", {
+            email: this.email,
+            name: this.name,
+            password: this.password,
+          });
         }
         this.$router.replace("/");
       } catch (error) {
