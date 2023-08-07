@@ -15,6 +15,7 @@ import NextElement from "~/components/NextElement.vue";
 
 export default {
   props: ["level", "clearedLines", "score"],
+
   components: {
     ScoreBoardItem,
     NextElement,

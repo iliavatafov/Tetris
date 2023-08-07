@@ -10,7 +10,6 @@ export const getters = {
   getUsers(state) {
     return state.users;
   },
-
   topTen(state) {
     return state.topTen;
   },
@@ -20,15 +19,12 @@ export const mutations = {
   setUsers(state, payload) {
     state.users = payload;
   },
-
   setRankList(state, payload) {
     state.raknList = payload;
   },
-
   setUserData(state, { responseData, userId }) {
     state.users[userId] = responseData;
   },
-
   setTopTen(state, payload) {
     state.topTen = payload;
   },
@@ -36,7 +32,7 @@ export const mutations = {
 
 export const actions = {
   async getUsers({ commit }) {
-    const url = `https://tetris-e5ce2-default-rtdb.europe-west1.firebasedatabase.app/users.json`;
+    const url = `${process.env.baseUrl}/users.json`;
     const respone = await fetch(url);
 
     const resData = await respone.json();
@@ -66,7 +62,7 @@ export const actions = {
       games: games,
     };
 
-    const url = `https://tetris-e5ce2-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}.json`;
+    const url = `${process.env.baseUrl}/users/${userId}.json`;
 
     const respone = await fetch(url, {
       method: "PUT",
@@ -92,7 +88,7 @@ export const actions = {
   },
 
   async addTopPlayer({ state, commit }, payload) {
-    const url = `https://tetris-e5ce2-default-rtdb.europe-west1.firebasedatabase.app/top-players.json`;
+    const url = `${process.env.baseUrl}/top-players.json`;
 
     const response = await fetch(url);
 
@@ -196,7 +192,7 @@ export const actions = {
   },
 
   async getTopPlayers({ commit }) {
-    const url = `https://tetris-e5ce2-default-rtdb.europe-west1.firebasedatabase.app/top-players.json`;
+    const url = `${process.env.baseUrl}/top-players.json`;
 
     const response = await fetch(url);
 

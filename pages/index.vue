@@ -40,6 +40,7 @@ export default {
     StartGame,
     GameActions,
   },
+
   computed: {
     ...mapState([
       "nextTetromino",
@@ -50,6 +51,7 @@ export default {
       "isGameStart",
     ]),
   },
+
   methods: {
     ...mapActions(["playAgain", "animate", "startGame", "moveTetromino"]),
   },
@@ -74,18 +76,18 @@ export default {
 
 <style>
 #game {
-  border: 2px solid #8be8e5;
+  border: 2px solid cyan;
   animation: shine-border 3s infinite linear;
 }
 
 @keyframes shine-border {
   0%,
   100% {
-    border-color: #8be8e5;
+    border-color: cyan;
     box-shadow: none;
   }
   50% {
-    border-color: #a084e8;
+    border-color: lavender;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
   }
 }

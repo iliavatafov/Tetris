@@ -3,22 +3,12 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
+
 export default {
-  computed: mapState([
-    "tetrominos",
-    "nextTetromino",
-    "colors",
-    "boxSize",
-    "tetromino",
-  ]),
+  computed: mapState(["tetrominos", "nextTetromino", "colors", "boxSize"]),
+
   methods: {
-    ...mapActions([
-      "createPlayfield",
-      "createTetrominosSequance",
-      "shiftTetromino",
-      "setNextTetromino",
-    ]),
     displayNextTetromino(name) {
       const tetrominoData = this.setTetrominoData(name);
 
@@ -53,9 +43,11 @@ export default {
       };
     },
   },
+
   mounted() {
     this.displayNextTetromino(this.nextTetromino);
   },
+
   watch: {
     nextTetromino(value) {
       this.displayNextTetromino(value);
@@ -66,14 +58,14 @@ export default {
 
 <style>
 #next-element {
-  border: 2px solid #8be8e5;
+  border: 2px solid cyan;
   animation: shine-border 3s infinite linear;
 }
 
 @keyframes shine-border {
   0%,
   100% {
-    border-color: #8be8e5;
+    border-color: cyan;
     box-shadow: none;
   }
   50% {

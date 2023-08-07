@@ -50,6 +50,7 @@ export default {
       return this.$store.getters["auth/userId"];
     },
   },
+
   methods: {
     logout() {
       this.$store.dispatch("auth/logout");

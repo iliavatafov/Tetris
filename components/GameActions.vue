@@ -2,7 +2,7 @@
   <div class="flex gap-4">
     <button
       @click="newGame"
-      class="text-[#8be8e5] text-4xl font-extrabold hover:text-[#a084e8] focus:outline-none"
+      class="text-cyan text-4xl font-extrabold hover:text-lavender focus:outline-none"
     >
       Start New Game
     </button>
@@ -11,19 +11,13 @@
 
 <script>
 import { mapActions } from "vuex";
+
 export default {
   methods: {
-    ...mapActions([
-      "resetState",
-      "startGame",
-      "createPlayfield",
-      "cancelAnimation",
-    ]),
+    ...mapActions(["cancelAnimation", "playAgain"]),
     newGame() {
-      this.resetState();
       this.cancelAnimation();
-      this.createPlayfield();
-      this.startGame();
+      this.playAgain();
     },
   },
 };

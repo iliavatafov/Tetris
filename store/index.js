@@ -75,6 +75,9 @@ export const mutations = {
   cancelAnimation(state) {
     state.cancelAnimation = true;
   },
+  setCancelAnimationFalse(state) {
+    state.cancelAnimation = false;
+  },
 };
 
 export const actions = {
@@ -104,7 +107,6 @@ export const actions = {
   drawPlayfield({ state, commit }) {
     if (!state.context || !state.canvas) {
       commit("setCanvas", document.getElementById("game"));
-
       if (!state.canvas) {
         return;
       }
@@ -167,7 +169,7 @@ export const actions = {
           dispatch("addTetrominoToPlayfield");
         }
       }
-      if (!state.gameOver) {
+      if (!state.gameOver && !state.cancelAnimation) {
         requestAnimationFrame(animationFrame);
       } else {
         cancelAnimationFrame(animationFrame);
@@ -177,6 +179,10 @@ export const actions = {
     if (state.tetromino && !state.cancelAnimation) {
       animationFrame();
     }
+  },
+
+  setCancelAnimationFalse({ commit }) {
+    commit("setCancelAnimationFalse");
   },
 
   cancelAnimation({ commit }) {
@@ -372,12 +378,26 @@ export const actions = {
     commit("setTetrominoMatrix", payload);
   },
 
-  playAgain({ commit, dispatch }) {
-    commit("resetState", initialState);
+  playAgain({ state, commit, dispatch }, payload) {
+    const isGameOver = state.gameOver;
+
+    commit("resetState", {
+      initialState,
+      canvas: null,
+      cancelAnimation: false,
+      gameOver: false,
+      clearedLines: 0,
+      level: 1,
+      score: 0,
+    });
     dispatch("createPlayfield");
+
+    if (payload || isGameOver) {
+      commit("startGame");
+    }
   },
 
-  resetState({ state, commit }) {
+  resetState({ commit }) {
     commit("resetState", { ...initialState, isGameStart: false });
   },
 

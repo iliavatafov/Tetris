@@ -11,7 +11,7 @@
         open
         class="font-cursive fixed z-50 custom-top left-1/10 width-4/5 rounded-xl border-none default-shadow p-0 m-0 overflow-hidden bg-white"
       >
-        <header class="bg-[#a084e8] text-white w-full p-4 text-xl font-bold">
+        <header class="bg-lavender text-white w-full p-4 text-xl font-bold">
           <slot name="header">
             <h2 class="m-0">{{ title }}</h2>
           </slot>
@@ -32,6 +32,9 @@
 <script>
 export default {
   name: "BaseDialog",
+
+  emits: ["close"],
+
   props: {
     show: {
       type: Boolean,
@@ -48,7 +51,7 @@ export default {
       default: false,
     },
   },
-  emits: ["close"],
+
   methods: {
     tryClose() {
       if (this.fixed) {

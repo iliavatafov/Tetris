@@ -24,10 +24,12 @@
 
 <script>
 import Header from "~/components/Header.vue";
+
 export default {
   components: {
     Header,
   },
+
   data() {
     return {
       isLoading: null,
@@ -37,6 +39,7 @@ export default {
       },
     };
   },
+
   async created() {
     this.$store.dispatch("auth/tryLogin");
     this.isLoading = true;
@@ -50,6 +53,7 @@ export default {
 
     this.isLoading = false;
   },
+
   methods: {
     handleError() {
       this.error = {

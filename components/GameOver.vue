@@ -84,10 +84,13 @@ import { formatCurrentDate } from "~/utils/dateFormatter.js";
 
 export default {
   emits: ["playAgain"],
+
   components: {
     ScoreBoardItem,
   },
+
   props: ["level", "clearedLines", "score"],
+
   data() {
     return {
       isTopPlayer: false,
@@ -98,6 +101,7 @@ export default {
       },
     };
   },
+
   async created() {
     if (this.isAuthenticated) {
       this.isLoading = true;
@@ -134,6 +138,7 @@ export default {
       this.isLoading = false;
     }
   },
+
   computed: {
     userId() {
       return this.$store.getters["auth/userId"];
@@ -142,9 +147,10 @@ export default {
       return this.$store.getters["auth/isAuthenticated"];
     },
   },
+
   methods: {
     play() {
-      this.$emit("playAgain");
+      this.$emit("playAgain", true);
     },
     handleError() {
       this.error = {

@@ -58,7 +58,7 @@
         </button>
         <button
           type="button"
-          class="tracking-wider font-cursive text-xl text-[#8be8e5] underline py-3 px-6 cursor-pointer inline-block hover:text-[#a084e8]"
+          class="tracking-wider font-cursive text-xl text-cyan underline py-3 px-6 cursor-pointer inline-block hover:text-lavender"
           @click="switchAuthMode"
         >
           {{ switchModeButtonCaption }}
@@ -70,8 +70,10 @@
 
 <script>
 import { mapActions } from "vuex";
+
 export default {
   middleware: "not-auth",
+
   data() {
     return {
       email: "",
@@ -88,11 +90,12 @@ export default {
       },
     };
   },
+
   created() {
-    this.resetState();
     this.cancelAnimation();
-    this.createPlayfield();
+    this.playAgain();
   },
+
   computed: {
     submitButtonCaption() {
       if (this.mode === "login") {
@@ -109,8 +112,9 @@ export default {
       }
     },
   },
+
   methods: {
-    ...mapActions(["resetState", "createPlayfield", "cancelAnimation"]),
+    ...mapActions(["cancelAnimation", "playAgain"]),
     async submitForm() {
       this.formIsValid = true;
 

@@ -37,11 +37,11 @@ export const tetrominos = {
 };
 
 export const colors = {
-  I: "#3877ff",
+  I: "#0dc2ff",
   O: "#ffe138",
-  T: "#ff0d72",
-  S: "#f538ff",
-  Z: "#ff8e0d",
-  J: "#ff8e0d",
-  L: "#0dc2ff",
+  T: "#8351a8",
+  S: "#68bb59",
+  Z: "#ff3333",
+  J: "#3877ff",
+  L: "#ff8e0d",
 };

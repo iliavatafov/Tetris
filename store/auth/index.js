@@ -70,7 +70,7 @@ export const actions = {
     }
 
     if (mode === "signup") {
-      const usersUrl = `https://tetris-e5ce2-default-rtdb.europe-west1.firebasedatabase.app/users/${responseData.localId}.json`;
+      const usersUrl = `${process.env.baseUrl}/users/${responseData.localId}.json`;
 
       const res = await fetch(usersUrl, {
         method: "PUT",
@@ -109,27 +109,21 @@ export const actions = {
   },
 
   tryLogin(context) {
-    // Get stored data from localStorage
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const userEmail = localStorage.getItem("userEmail");
     const tokenExpiration = localStorage.getItem("tokenExpiration");
 
-    // Calculate token expiration time
     const expiresIn = +tokenExpiration - new Date().getTime();
 
-    // Return if token is expired
     if (expiresIn < 0) {
       const token = localStorage.clear();
       return;
     }
 
-    // Set autoLogout to execute when token expiers
     timer = setTimeout(() => {
       context.dispatch("autoLogout");
     }, expiresIn);
-
-    // If there is token and userId in localStorage set the user data in the Vuex store
 
     if (token && userId) {
       context.commit("setUser", {

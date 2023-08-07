@@ -29,4 +29,9 @@ export default {
   modules: ["portal-vue/nuxt"],
 
   build: {},
+
+  env: {
+    baseUrl:
+      "https://tetris-e5ce2-default-rtdb.europe-west1.firebasedatabase.app/",
+  },
 };

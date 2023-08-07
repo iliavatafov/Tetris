@@ -15,6 +15,11 @@
 <script>
 export default {
   emits: ["gameStart"],
+
+  created() {
+    this.$store.dispatch("setCancelAnimationFalse");
+  },
+
   methods: {
     start() {
       this.$emit("gameStart");
